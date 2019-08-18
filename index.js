@@ -51,7 +51,10 @@ app.post("/signup", (req, res) => {
       // si tu as trouveer le m^me utilisateur qui a déja ce mail
       console.log(user);
 
-      res.send("Cette adresse email est déja utilisée");
+      res.json({
+        status: 409,
+        message: "Cette adresse mail est déja utilisée"
+      });
     } else {
       // sinon on créer un nouvel utilisateur
       const user = new User({
