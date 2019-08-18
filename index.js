@@ -13,9 +13,12 @@ app.use(cors());
 
 // base de donnée
 const mongoose = require("mongoose");
-mongoose.connect("mongodb://localhost:27017/Coworking", {
-  useNewUrlParser: true
-});
+mongoose.connect(
+  process.env.MONGODB_URI || "mongodb://localhost:27017/Coworking",
+  {
+    useNewUrlParser: true
+  }
+);
 
 // notre modèle (tjrs avec majuscule )user
 const User = new mongoose.model("User", {
