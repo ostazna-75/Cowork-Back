@@ -30,6 +30,10 @@ const User = new mongoose.model("User", {
   username: String
 });
 
+app.get("/", (req, res) => {
+  res.send("Bienvenue");
+});
+
 app.post("/signup", (req, res) => {
   console.log("je rentre dans la route signup");
 
