@@ -7,17 +7,16 @@
 // ce sont des fonction qui permettetnt de faciliter l"écriture du back
 // Grace à express on peut faire des manipulation dans le backend
 const express = require("express");
+// const cors =  pour pouvoir lire les fichier à partir d'un autre nom de domaine
+const cors = require("cors");
 const app = express();
+app.use(cors());
 
-// body parser sert a récupérer les information rentré dans es input par exemples
+// body parser sert a récupérer les information rentré dans les input par exemples
 // bodyparser sert à récupérer des informations que l'on envoie dans les requêtes
 // avec Postman logiciel qui permet de lire les infos dans le body
 const bodyParser = require("body-parser");
 app.use(bodyParser.json());
-
-// const cors =  pour pouvoir lire les fichier à partir d'un autre nom de domaine
-const cors = require("cors");
-app.use(cors());
 
 // MongoDb = base de donnée
 // On va pouvoir changer et manipuler les données qui sont envoyé par Postman ou les requête envoyé par postman ou l'application
