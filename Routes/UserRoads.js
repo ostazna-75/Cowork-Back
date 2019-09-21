@@ -11,8 +11,8 @@ app.get("/tovo", (req, res) => {
   res.send("tovo is the boss");
 });
 
-app.post("/signup", (req, res) => {
-  console.log("je rentre dans la route signup");
+app.post("/user/signup", (req, res) => {
+	console.log("je rentre dans la route signup");
 
   const token = uid2(64); // uid2 va générer une chaine de caractère aléatoire , une chaine de 64 caractere
   const salt = uid2(64); // une autre chaine de 64
