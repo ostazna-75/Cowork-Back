@@ -39,6 +39,11 @@ app.get("/", (req, res) => {
 const userRoads = require("./Routes/UserRoads");
 app.use(userRoads);
 
+/* en cas error */
+app.all("*", (req, res) => {
+  res.status(404).send("Page introuvable");
+});
+
 // Permet de démarer le serveur, de l'écouter
 app.listen(process.env.PORT || 3000, () => {
   console.log("Server Started");
