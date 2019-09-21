@@ -18,6 +18,17 @@ router.get("/user/tovo", (req, res) => {
   res.send("tovo is the boss");
 });
 
+// voir le username d"une utlisiateur
+router.get("/user/:id", (req, res) => {
+  User.findById(req.params.id).exec((error, user) => {
+    if (user) {
+      res.status(200).send(user.username);
+    } else {
+      res.status(500).send(error.message);
+    }
+  });
+});
+
 router.post("/user/signup", (req, res) => {
   /*  const password = req.body.password;
   const email = req.body.email;
@@ -26,14 +37,31 @@ router.post("/user/signup", (req, res) => {
   //DESTRUCTURING
   // étapa  1 : récupère ce que l'applicatiok nous envoie
   const { password, email, username } = req.body;
-  //étape 2 : transforme les donnée que l'on a récupéré en user
-  const user = new User({
-    password,
-    email,
-    username
-  });
 
-  res.send(user);
+  // si le mail existe déja
+  User.findOne({ email }).exec((error, userfound) => {
+    if (userfound) {
+      res
+        .status(302)
+        .send("Mail déja utilisé, veuillez vous connectez avec le signin");
+    } else {
+      //étape 2 : transforme les donnée que l'on a récupéré en user
+      const user = new User({
+        password,
+        email,
+        username
+      });
+      //
+      user.save((error, usersaved) => {
+        if (error) {
+          /*  console.log(error.message); */
+          res.status(500).send(error.message);
+        } else {
+          res.status(200).send(usersaved);
+        }
+      });
+    }
+  });
 });
 
 module.exports = router;
