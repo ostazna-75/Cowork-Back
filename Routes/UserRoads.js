@@ -28,12 +28,8 @@ router.get("/user/:id", (req, res) => {
     }
   });
 });
-
+/* SIGNUP créer compte email pour site */
 router.post("/user/signup", (req, res) => {
-  /*  const password = req.body.password;
-  const email = req.body.email;
-  const username = req.body.username; */
-
   //DESTRUCTURING
   // étapa  1 : récupère ce que l'applicatiok nous envoie
   const { password, email, username } = req.body;
@@ -62,6 +58,25 @@ router.post("/user/signup", (req, res) => {
       });
     }
   });
+});
+/* singnIN */
+router.post("/user/signin", (req, res) => {
+  const { password, email } = req.body;
+
+  if (password === undefined || email === undefined) {
+    res.status(401).send("EMPTY PARAMETERS");
+  } else {
+    User.findOne({ email, password }).exec((error, userfound) => {
+      if (userfound) {
+        res.status(200).send(userfound);
+        /* else : dans le  cas ou le mail n'existe pas */
+      } else {
+        res.status(401).send("UNAUTHORIZED");
+
+        //étape 2 : transforme les donnée que l'on a récupéré en user
+      }
+    });
+  }
 });
 
 module.exports = router;
