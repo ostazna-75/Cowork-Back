@@ -33,45 +33,64 @@ router.post("/user/signup", (req, res) => {
   //DESTRUCTURING
   // étapa  1 : récupère ce que l'applicatiok nous envoie
   const { password, email, username } = req.body;
-
-  // si le mail existe déja
-  User.findOne({ email }).exec((error, userfound) => {
-    if (userfound) {
-      res
-        .status(302)
-        .send("Mail déja utilisé, veuillez vous connectez avec le signin");
-    } else {
-      //étape 2 : transforme les donnée que l'on a récupéré en user
-      const user = new User({
-        password,
-        email,
-        username
-      });
-      //
-      user.save((error, usersaved) => {
-        if (error) {
-          /*  console.log(error.message); */
-          res.status(500).send(error.message);
-        } else {
-          res.status(200).send(usersaved);
-        }
-      });
-    }
-  });
+  if (
+    password === undefined ||
+    email === undefined ||
+    username === undefined ||
+    password === "" ||
+    email === "" ||
+    username === ""
+  ) {
+    res.status(400).send("Veuillez remplir tous les champs demandés");
+  } else {
+    // si le mail existe déja
+    User.findOne({ email }).exec((error, userfound) => {
+      if (userfound) {
+        res
+          .status(302)
+          .send("Mail déja utilisé, veuillez vous connectez avec le signin");
+      } else {
+        //étape 2 : transforme les donnée que l'on a récupéré en user
+        const user = new User({
+          password,
+          email,
+          username
+        });
+        //
+        user.save((error, usersaved) => {
+          if (error) {
+            /*  console.log(error.message); */
+            res
+              .status(500)
+              .send(
+                "Problème sur le serveur, veuillez réessayer ultérieurement"
+              );
+          } else {
+            res.status(200).send(usersaved);
+          }
+        });
+      }
+    });
+  }
 });
 /* singnIN */
 router.post("/user/signin", (req, res) => {
   const { password, email } = req.body;
 
-  if (password === undefined || email === undefined) {
-    res.status(401).send("EMPTY PARAMETERS");
+  if (
+    password === undefined ||
+    email === undefined ||
+    password === "" ||
+    email === ""
+  ) {
+    res.status(401).send("Veuillez remplir tous les champs demandés");
   } else {
     User.findOne({ email, password }).exec((error, userfound) => {
       if (userfound) {
         res.status(200).send(userfound);
         /* else : dans le  cas ou le mail n'existe pas */
       } else {
-        res.status(401).send("UNAUTHORIZED");
+        res.status(401).send("Email ou Mot de passe incorrect");
 
         //étape 2 : transforme les donnée que l'on a récupéré en user
       }
