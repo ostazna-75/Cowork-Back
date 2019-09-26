@@ -123,4 +123,19 @@ router.post("/user/signin", (req, res) => {
   }
 });
 
+/* Si un utilisateur existe avec token et email good sinon bad */
+/* Ceci est une sécurité en plus */
+router.post("/user/verification", (req, res) => {
+  const { email, token } = req.body;
+  User.findOne({ email, token }).exec((error, user) => {
+    if (error) {
+      res.status(500).send("Server error");
+    } else if (user) {
+      res.status(200).send("autorized");
+    } else {
+      res.status(401).send("Unauthorized");
+    }
+  });
+});
+
 module.exports = router;
