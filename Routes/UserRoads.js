@@ -50,11 +50,18 @@ router.post("/user/signup", (req, res) => {
           .status(302)
           .send("Mail déja utilisé, veuillez vous connectez avec le signin");
       } else {
+        /* uid2(64) créer des chaine de caractère unique, 
+        sa permet d'avoir un token unique et un salt unique */
+        const token = uid2(64);
+        const salt = uid2(64);
+        const hash = SHA256(password + salt).toString(encBase64);
         //étape 2 : transforme les donnée que l'on a récupéré en user
         const user = new User({
-          password,
           email,
-          username
+          username,
+          token,
+          salt,
+          hash
         });
         //
         user.save((error, usersaved) => {
@@ -66,7 +73,11 @@ router.post("/user/signup", (req, res) => {
                 "Problème sur le serveur, veuillez réessayer ultérieurement"
               );
           } else {
-            res.status(200).send(usersaved);
+            res.status(200).send({
+              email: usersaved.email,
+              username: usersaved.username,
+              token: usersaved.token
+            });
           }
         });
       }
@@ -85,12 +96,26 @@ router.post("/user/signin", (req, res) => {
   ) {
     res.status(401).send("Veuillez remplir tous les champs demandés");
   } else {
-    User.findOne({ email, password }).exec((error, userfound) => {
+    /* si lemail existe dans la base donnée  */
+    User.findOne({ email }).exec((error, userfound) => {
       if (userfound) {
-        res.status(200).send(userfound);
+        const hash = SHA256(password + userfound.salt).toString(encBase64);
+
+        if (
+          /* s'il a trouvé l'email' il regarde le Hash */
+          hash === userfound.hash
+        ) {
+          res.status(200).send({
+            email: userfound.email,
+            username: userfound.username,
+            token: userfound.token
+          });
+        } else {
+          res.status(401).send("Mot de passe incorrect");
+        }
         /* else : dans le  cas ou le mail n'existe pas */
       } else {
-        res.status(401).send("Email ou Mot de passe incorrect");
+        res.status(401).send("Email incorrect");
 
         //étape 2 : transforme les donnée que l'on a récupéré en user
       }
