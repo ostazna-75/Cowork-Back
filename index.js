@@ -19,7 +19,8 @@ const bodyParser = require("body-parser");
 app.use(bodyParser.json());
 
 // MongoDb = base de donnée
-// On va pouvoir changer et manipuler les données qui sont envoyé par Postman ou les requête envoyé par postman ou l'application
+// On va pouvoir changer et manipuler les données qui sont envoyé
+// ...par Postman ou les requête envoyé par postman ou l'application
 const mongoose = require("mongoose");
 mongoose.connect(
   process.env.MONGODB_URI || "mongodb://localhost:27017/Coworking",
