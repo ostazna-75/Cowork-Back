@@ -13,7 +13,8 @@ const Cowork = new mongoose.model("Cowork", {
   location: { lat: String, lon: String },
   name: String,
   street: String,
-  zipcode: String
+  zipcode: String,
+  categorie: String
 });
 
 module.exports = Cowork;
