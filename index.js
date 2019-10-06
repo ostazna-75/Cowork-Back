@@ -23,14 +23,14 @@ app.use(bodyParser.json());
 // ...par Postman ou les requête envoyé par postman ou l'application
 const mongoose = require("mongoose");
 mongoose.connect(
-	process.env.MONGODB_URI || "mongodb://localhost:27017/Coworking",
-	{
-		useNewUrlParser: true
-	}
+  process.env.MONGODB_URI || "mongodb://localhost:27017/Coworking",
+  {
+    useNewUrlParser: true
+  }
 );
 // Get sert à lire les donnée
 app.get("/", (req, res) => {
-	res.send("Bienvenue");
+  res.send("Bienvenue");
 });
 
 // Routes users
@@ -44,10 +44,10 @@ const coworkRoads = require("./Routes/CoworkRoads");
 app.use(coworkRoads);
 /* en cas error */
 app.all("*", (req, res) => {
-	res.status(404).send("Page introuvable");
+  res.status(404).send("Page introuvable");
 });
 
 // Permet de démarer le serveur, de l'écouter
 app.listen(process.env.PORT || 3001, () => {
-	console.log("Server Started");
+  console.log("Server Started");
 });
