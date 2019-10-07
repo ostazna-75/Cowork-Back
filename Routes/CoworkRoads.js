@@ -28,7 +28,7 @@ router.post("/cowork/populate", (req, res) => {
 });
 
 router.get("/cowork/list", (req, res) => {
-  Cowork.find({ categorie: "espaces" }).exec((error, response) => {
+  Cowork.find().exec((error, response) => {
     res.status(200).send(response);
   });
 });
